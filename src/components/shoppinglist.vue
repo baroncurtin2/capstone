@@ -12,12 +12,12 @@
       </v-card-row>
       <v-divider></v-divider>
       <v-list v-if="tblData.length > 0">
-        <template v-for="line in tblData">
-          <v-list-item :key="line.name">
+        <template v-for="(line, index) in tblData">
+          <v-list-item :key="line.id">
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title v-html="line.name"></v-list-tile-title>
-                <v-list-tile-subtitle v-html="line.quantity"></v-list-tile-subtitle>
+                <v-list-tile-title v-html="line.itemName"></v-list-tile-title>
+                <v-list-tile-sub-title v-html="line.itemQuantity"></v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-btn icon @click.native="addQuant(line)">
@@ -31,28 +31,37 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list-item>
+          <v-divider v-if="index < tblData.length - 1"></v-divider>
         </template>
       </v-list>
       <v-divider></v-divider>
-      <v-layout row>
-        <v-text-field name="item-name"
-                      label="Item Name"
-                      single-line
-                      type="string"
-                      :value="tblOps.addItem.name">
+      <v-container>
+        <v-layout row justify-space-between>
+          <v-flex xs6>
+            <v-text-field name="item-name"
+                          label="Item Name"
+                          single-line
+                          type="string"
+                          :value="tblOps.addItem.itemName"
+                          v-model="tblOps.addItem.itemName">
 
-        </v-text-field>
-        <v-text-field name="item-quant"
-                      label="Quantity"
-                      single-line
-                      type="integer"
-                      :value="tblOps.addItem.quantity">
+            </v-text-field>
+          </v-flex>
+          <v-flex xs6>
+            <v-text-field name="item-quant"
+                          label="Quantity"
+                          single-line
+                          type="number"
+                          :value="tblOps.addItem.itemQuantity"
+                          v-model.number="tblOps.addItem.itemQuantity">
 
-        </v-text-field>
-        <v-btn icon @click.native="insItem(tblOps.addItem)">
-          <v-icon>library_add</v-icon>
-        </v-btn>
-      </v-layout>
+            </v-text-field>
+          </v-flex>
+          <v-btn icon @click.native="insItem(tblOps.addItem)">
+            <v-icon>library_add</v-icon>
+          </v-btn>
+        </v-layout>
+      </v-container>
     </v-card>
   </div>
 </template>
@@ -67,8 +76,9 @@
         tblData: [],
         tblOps: {
           addItem: {
-            name: '',
-            quantity: ''
+            id: '',
+            itemName: '',
+            itemQuantity: 0
           }
         }
       }
@@ -92,6 +102,7 @@
         }
       },
       insItem (myItem) {
+        let self = this
         let url = 'https://bcurtin-webapp.azurewebsites.net'
         let client = new Azure.MobileServiceClient(url)
         let table = client.getTable('ShopList')
@@ -99,28 +110,32 @@
         table.insert(myItem)
           .done((insertedItem) => {
             let id = insertedItem.id
+            self.$emit('successUpload', true)
           }, this.failure)
       },
       addQuant (item) {
+        let self = this
         let url = 'https://bcurtin-webapp.azurewebsites.net'
         let client = new Azure.MobileServiceClient(url)
         let table = client.getTable('ShopList')
 
-        item.quantity++
+        item.itemQuantity++
         table.update(item)
           .done((updatedItem) => {
             let id = updatedItem.id
+            self.getData()
           }, this.failure)
       },
       subQuant (item) {
+        let self = this
         let url = 'https://bcurtin-webapp.azurewebsites.net'
         let client = new Azure.MobileServiceClient(url)
         let table = client.getTable('ShopList')
-
-        item.quantity--
+        item.itemQuantity--
         table.update(item)
           .done((updatedItem) => {
             let id = updatedItem.id
+            self.getData()
           }, this.failure)
       }
     }

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
-import Slist from '@/components/shoppinglist'
+import sList from '../components/shoppinglist'
+import aboutPage from '../components/about'
+import search from '../components/search'
 
 Vue.use(Router)
 
@@ -9,13 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'List',
-      component: Slist
+      name: 'index',
+      component: sList
     },
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
+      path: '/about',
+      name: 'About',
+      component: aboutPage
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: search
     }
   ]
 })
