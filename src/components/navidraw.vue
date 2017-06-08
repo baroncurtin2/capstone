@@ -56,17 +56,17 @@
           items: [
             {
               comp: 'shoplist',
-              fa: true,
-              icon: 'list-ul',
+              fa: false,
+              icon: 'add_shopping_cart',
               path: '/',
               title: 'Shopping List'
             },
             {
-              comp: 'search',
-              fa: true,
-              icon: 'search',
-              path: '/search',
-              title: 'Search'
+              comp: 'mylists',
+              fa: false,
+              icon: 'view_list',
+              path: '/lists',
+              title: 'All Lists'
             },
             {
               comp: 'about',

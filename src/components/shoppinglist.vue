@@ -68,14 +68,24 @@
 
 <script>
   import Azure from 'azure-mobile-apps-client'
+  import moment from 'moment'
+  import Bus from '../eventbus'
 
   export default {
     name: 'shoppinglist',
+    created () {
+      this.setListId()
+
+      Bus.$on('searchData', (findId) => {
+        this.searchData(findId)
+      })
+    },
     data () {
       return {
         tblData: [],
         tblOps: {
           addItem: {
+            listId: '',
             id: '',
             itemName: '',
             itemQuantity: 0
@@ -125,6 +135,29 @@
             let id = updatedItem.id
             self.getData()
           }, this.failure)
+      },
+      searchData (id) {
+        console.log(id)
+        let self = this
+        let url = 'https://bcurtin-webapp.azurewebsites.net'
+        let client = new Azure.MobileServiceClient(url)
+        let table = client.getTable('ShopList')
+
+        table
+          .where({listId: id})
+          .read()
+          .then(success, self.failure)
+
+        function success(results) {
+          console.log(results)
+          self.tblData = results
+        }
+      },
+      setListId () {
+        let self = this
+
+        self.tblOps.addItem.listId = moment().format()
+        console.log(moment().format())
       },
       subQuant (item) {
         let self = this

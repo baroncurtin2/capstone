@@ -24,12 +24,16 @@
   import about from './components/about.vue'
   import search from './components/search.vue'
   import homeimg from './components/homeimage.vue'
+  import mylists from './components/mylists.vue'
 
   export default {
     name: 'app',
     created () {
       Bus.$on('successUpload', (val) => {
         this.doAlert(val)
+      })
+      Bus.$on('searchData', () => {
+        this.myView = shoplist
       })
       Bus.$on('sendView', (val) => {
         this.myView = val
@@ -49,7 +53,8 @@
       'shoplist': shoplist,
       'about': about,
       'search': search,
-      'homeimg': homeimg
+      'homeimg': homeimg,
+      'mylists': mylists
     },
     data () {
       return {

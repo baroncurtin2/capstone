@@ -1,9 +1,9 @@
 <template>
   <v-layout>
-    <v-btn @click.native.stop="startSignIn()" icon class="white--text" v-tooltip:bottom="logInTip">
+    <v-btn @click.native="startSignIn()" icon class="white--text" v-tooltip:bottom="logInTip">
       <v-icon fa>google</v-icon>
     </v-btn>
-    <v-btn icon @native.click="startSignOut()" v-tooltip:bottom="logOffTip">
+    <v-btn icon @click.native="startSignOut()" v-tooltip:bottom="logOffTip">
       <v-icon fa class="white--text">sign-out</v-icon>
     </v-btn>
   </v-layout>
