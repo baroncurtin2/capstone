@@ -23,6 +23,7 @@
   import shoplist from './components/shoppinglist.vue'
   import about from './components/about.vue'
   import search from './components/search.vue'
+  import googleAuth from './components/googleauth.vue'
 
   export default {
     name: 'app',
@@ -33,17 +34,30 @@
       Bus.$on('sendView', (val) => {
         this.myView = val
       })
+      Bus.$on('signedIn', (success) => {
+        this.myView = (success) ? shoplist : googleAuth
+      })
+      Bus.$on('signedOut', (success) => {
+        if (success) {
+          this.myView = (success) ? googleAuth : shoplist
+        }
+      })
     },
     components: {
       'navidraw': navidraw,
       'navitool': navitool,
       'shoplist': shoplist,
       'about': about,
-      'search': search
+      'search': search,
+      'googleAuth': googleAuth
     },
     data () {
       return {
-        myView: shoplist,
+        google: {
+          signedIn: false,
+          signedOut: true
+        },
+        myView: googleAuth,
         uploadSuccess: false
       }
     },
