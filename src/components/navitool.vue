@@ -5,37 +5,26 @@
       <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
     </v-container>
     <v-spacer></v-spacer>
-    <v-btn icon @native.click="signOut()" v-tooltip:bottom="myTooltip">
-      <v-icon fa class="white--text">sign-out</v-icon>
-    </v-btn>
+    <google-auth></google-auth>
   </v-toolbar>
 </template>
 
 <script>
+  import googleAuth from './googleauth.vue'
   import fb from 'firebase'
   import Bus from '../eventbus'
 
   export default {
     name: 'navitool',
+    components: {
+      'googleAuth': googleAuth
+    },
     data () {
       return {
-        myTooltip: {
-          html: 'Log-Off'
-        },
         title: 'The Spill'
       }
     },
     methods: {
-      signOut () {
-        let self = this
-        fb.auth().signOut().then(() => {
-          Bus.$emit('signedOut', true)
-        }).catch((error) => {
-          // An error happened.
-          console.log(error)
-          Bus.$emit('signedOut', false)
-        })
-      },
       toggleDrawer () {
         Bus.$emit('toggleDrawer', true)
       }

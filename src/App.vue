@@ -23,7 +23,7 @@
   import shoplist from './components/shoppinglist.vue'
   import about from './components/about.vue'
   import search from './components/search.vue'
-  import googleAuth from './components/googleauth.vue'
+  import homeimg from './components/homeimage.vue'
 
   export default {
     name: 'app',
@@ -35,11 +35,11 @@
         this.myView = val
       })
       Bus.$on('signedIn', (success) => {
-        this.myView = (success) ? shoplist : googleAuth
+        this.myView = (success) ? shoplist : homeimg
       })
       Bus.$on('signedOut', (success) => {
         if (success) {
-          this.myView = (success) ? googleAuth : shoplist
+          this.myView = (success) ? homeimg : shoplist
         }
       })
     },
@@ -49,7 +49,7 @@
       'shoplist': shoplist,
       'about': about,
       'search': search,
-      'googleAuth': googleAuth
+      'homeimg': homeimg
     },
     data () {
       return {
@@ -57,7 +57,7 @@
           signedIn: false,
           signedOut: true
         },
-        myView: googleAuth,
+        myView: homeimg,
         uploadSuccess: false
       }
     },

@@ -1,8 +1,12 @@
 <template>
-  <v-btn @click.native.stop="startSignIn()">
-    <v-icon fa left dark>google</v-icon>
-    Google Sign-In
-  </v-btn>
+  <v-layout>
+    <v-btn @click.native.stop="startSignIn()" icon class="white--text" v-tooltip:bottom="logInTip">
+      <v-icon fa>google</v-icon>
+    </v-btn>
+    <v-btn icon @native.click="startSignOut()" v-tooltip:bottom="logOffTip">
+      <v-icon fa class="white--text">sign-out</v-icon>
+    </v-btn>
+  </v-layout>
 </template>
 
 <script>
@@ -12,6 +16,16 @@
 
   export default {
     name: 'googleauth',
+    data () {
+      return {
+        logInTip: {
+          html: 'Google Sign-In'
+        },
+        logOffTip: {
+          html: 'Log-Off'
+        }
+      }
+    },
     methods: {
       startSignIn () {
         let fbConfig = {
@@ -25,13 +39,14 @@
         let fbApp = fb.initializeApp(fbConfig)
 
         let provider = new fb.auth.GoogleAuthProvider()
-        fb.auth().signInWithRedirect(provider)
-        fb.auth().getRedirectResult()
+        fb.auth().signInWithPopup(provider)
+        //        fb.auth().getRedirectResult()
           .then((result) => {
-            let token = result.credential.accessToken
-            let user = result.user
-
-            Bus.$emit('signedIn', true)
+            if (result.credential) {
+              let token = result.credential.accessToken
+              let user = result.user
+              Bus.$emit('signedIn', true)
+            }
           })
           .catch((error) => {
             // Handle Errors here.
@@ -44,6 +59,17 @@
 
             Bus.$emit('signedIn', false)
           })
+      },
+      startSignOut () {
+        let self = this
+        fb.auth().signOut()
+          .then(() => {
+            Bus.$emit('signedOut', true)
+          }).catch((error) => {
+          // An error happened.
+          console.log(error)
+          Bus.$emit('signedOut', false)
+        })
       }
     }
   }

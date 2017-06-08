@@ -8,7 +8,7 @@
       </v-card-title>
     </v-card-row>
     <!--image-->
-    <v-card-row img="../assets/about-us.jpg" height="300px">
+    <v-card-row img="/static/about-us.jpg" height="300px">
     </v-card-row>
     <v-card-text class="teal darken-3 white--text">
       <div v-html="msg"></div>
